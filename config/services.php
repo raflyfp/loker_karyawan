@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'snam' => [
+        'api_url' => env('SNAM_KARYAWAN_API_URL', 'https://www.snam110.dpdns.org/absen/api/karyawan'),
+        'timeout' => env('SNAM_API_TIMEOUT', 30),
+    ],
+
 ];
