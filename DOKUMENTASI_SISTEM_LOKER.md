@@ -223,3 +223,30 @@ Pengujian mencakup:
    ```bash
    php artisan loker:sync-karyawan
    ```
+
+---
+
+## 12. Panel Administrator & CRUD Master Data
+
+Sistem dilengkapi panel administrator untuk mengelola master data tanpa harus mengakses database secara manual:
+
+### Kredensial Login Admin:
+- **URL Login**: `http://localhost/loker-karyawan/public/admin/login` (atau klik tombol **"Login Admin"** pada header layar kiosk)
+- **Username**: `admin`
+- **Password**: `adminsna`
+
+### Fitur Master Data CRUD:
+1. **Dashboard Overview**: Ringkasan real-time kapasitas loker (tersedia, terisi, terkunci/rusak untuk Laki-laki & Perempuan), total karyawan, dan alokasi aktif.
+2. **Master Karyawan**:
+   - Tambah data karyawan baru (NIK barcode, nama, divisi, jabatan, kelompok gender, status aktif).
+   - Edit & hapus data karyawan.
+   - Tombol **"Sinkronkan API"** langsung dari web untuk memperbarui database karyawan dari server SNA Medika.
+   - Filter gender (`L`, `P`, Belum Diatur), filter status aktif/nonaktif, dan pencarian teks cepat.
+3. **Master Loker**:
+   - Tambah data loker baru (Kode loker, nomor urut, kelompok gender, status aktif).
+   - Edit & hapus loker (loker yang sedang dipakai dicegah agar tidak terhapus).
+   - Tombol cepat **Kunci / Buka Kunci** untuk keperluan maintenance/kerusakan fisik loker.
+4. **Data Alokasi & Riwayat Transaksi**:
+   - Memantau penggunaan seluruh loker yang sedang aktif maupun yang sudah selesai/dibatalkan.
+   - Fitur **"Paksa Lepas"** (Emergency Release/Reset) jika ada karyawan yang kartu ID-nya hilang atau lupa tap out saat pulang.
+

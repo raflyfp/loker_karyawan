@@ -8,6 +8,7 @@ class LokerMandiriApp {
         this.genderModal = document.getElementById('genderModal');
         this.detailModal = document.getElementById('detailModal');
         this.cameraModal = document.getElementById('cameraModal');
+        this.adminLoginModal = document.getElementById('adminLoginModal');
 
         this.html5QrCode = null;
         this.isScanning = false;
@@ -162,7 +163,8 @@ class LokerMandiriApp {
         return (
             (this.genderModal && !this.genderModal.classList.contains('hidden')) ||
             (this.detailModal && !this.detailModal.classList.contains('hidden')) ||
-            (this.cameraModal && !this.cameraModal.classList.contains('hidden'))
+            (this.cameraModal && !this.cameraModal.classList.contains('hidden')) ||
+            (this.adminLoginModal && !this.adminLoginModal.classList.contains('hidden'))
         );
     }
 
@@ -444,6 +446,30 @@ class LokerMandiriApp {
             } catch (err) {
                 alert('Gagal menghubungi server.');
             }
+        });
+
+        // Modal Login Admin
+        document.getElementById('openAdminLoginModalBtn')?.addEventListener('click', () => {
+            this.adminLoginModal?.classList.remove('hidden');
+            const passInput = document.getElementById('modalPasswordInput');
+            if (passInput) passInput.focus();
+        });
+
+        const closeAdminModal = () => {
+            this.adminLoginModal?.classList.add('hidden');
+            this.barcodeInput?.focus();
+        };
+
+        document.getElementById('closeAdminLoginModalBtn')?.addEventListener('click', closeAdminModal);
+        document.getElementById('cancelAdminLoginModalBtn')?.addEventListener('click', closeAdminModal);
+
+        const togglePassBtn = document.getElementById('toggleModalPasswordBtn');
+        const modalPassInput = document.getElementById('modalPasswordInput');
+        togglePassBtn?.addEventListener('click', () => {
+            if (!modalPassInput) return;
+            const isPass = modalPassInput.getAttribute('type') === 'password';
+            modalPassInput.setAttribute('type', isPass ? 'text' : 'password');
+            togglePassBtn.textContent = isPass ? 'Sembunyikan' : 'Lihat';
         });
     }
 

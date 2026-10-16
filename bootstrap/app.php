@@ -14,6 +14,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'api/*',
         ]);
+        $middleware->redirectTo(
+            guests: '/admin/login',
+            users: '/admin',
+        );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
