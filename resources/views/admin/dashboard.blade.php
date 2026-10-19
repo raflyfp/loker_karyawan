@@ -19,7 +19,7 @@
                 Kelola Loker
             </a>
             <a href="{{ route('loker.index') }}" target="_blank" class="px-3.5 py-2 text-xs font-bold text-white bg-[#d92534] hover:bg-[#b91c2b] rounded-md transition shadow-xs flex items-center gap-1.5">
-                <span>Layar Kiosk</span>
+                <span>Layar Loker</span>
                 <span class="text-[10px]">↗</span>
             </a>
         </div>

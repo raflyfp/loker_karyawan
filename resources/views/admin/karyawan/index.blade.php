@@ -248,7 +248,7 @@
                     <option value="L">Laki-laki (Loker Atas 1..100)</option>
                     <option value="P">Perempuan (Loker Bawah 1..100)</option>
                 </select>
-                <p class="text-[10px] text-slate-400 mt-0.5">Jika dikosongkan, karyawan akan diminta memilih kelompok saat pertama kali scan di kiosk.</p>
+                <p class="text-[10px] text-slate-400 mt-0.5">Jika dikosongkan, karyawan akan diminta memilih kelompok saat pertama kali scan kartu loker.</p>
             </div>
 
             <div class="pt-1">

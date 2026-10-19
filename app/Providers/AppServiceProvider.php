@@ -21,12 +21,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Otomatis gunakan HTTPS jika diakses melalui reverse proxy / Cloudflare Tunnel
-        if (request()->server('HTTP_X_FORWARDED_PROTO') === 'https' || request()->server('HTTP_CF_RAY') || str_starts_with(config('app.url'), 'https://')) {
+        // Otomatis gunakan HTTPS HANYA jika request datang lewat HTTPS atau reverse proxy / Cloudflare Tunnel
+        if (request()->server('HTTP_X_FORWARDED_PROTO') === 'https' || request()->server('HTTP_CF_RAY') || request()->isSecure()) {
             URL::forceScheme('https');
         }
 
-        // Pastikan asset dan URL mengarah ke domain tunnel jika diakses dari luar
+        // Pastikan asset dan URL mengarah ke domain tunnel jika diakses dari luar lewat Cloudflare Tunnel
         if ($forwardedHost = request()->header('x-forwarded-host')) {
             URL::forceRootUrl('https://' . $forwardedHost);
         } elseif (request()->server('HTTP_CF_RAY') && config('app.url')) {

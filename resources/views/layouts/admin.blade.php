@@ -61,11 +61,11 @@
                 <div class="flex items-center gap-3">
                     <a href="{{ route('loker.index') }}" target="_blank"
                         class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#0060b2] bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition"
-                        title="Buka Layar Kiosk Scanner Loker">
+                        title="Buka Layar Scanner Loker">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>
-                        <span>Buka Kiosk</span>
+                        <span>Buka Layar Loker</span>
                     </a>
 
                     <!-- User / Logout Dropdown -->
@@ -120,7 +120,7 @@
             </a>
             <a href="{{ route('loker.index') }}" target="_blank"
                 class="block px-3 py-2 rounded-md text-[#0060b2] hover:bg-blue-50 font-semibold">
-                ↗ Buka Layar Kiosk Scanner
+                ↗ Buka Layar Loker
             </a>
         </div>
     </header>
