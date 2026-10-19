@@ -107,7 +107,7 @@ class LokerAllocationService
                 'gender_group' => $loker->gender_group,
             ],
             'message' => "Loker nomor {$loker->nomor_urut} ({$loker->kode_loker}) berhasil dikembalikan.",
-            'speech_text' => "Terima kasih, {$karyawan->nama}. Loker nomor {$speechNomor} telah dikembalikan.",
+            'speech_text' => 'Terima kasih',
         ];
     }
 
@@ -177,7 +177,7 @@ class LokerAllocationService
                 'gender_group' => $loker->gender_group,
             ],
             'message' => "Selamat datang, {$karyawan->nama}. Silakan gunakan loker nomor {$loker->nomor_urut}.",
-            'speech_text' => "Selamat datang, {$karyawan->nama}. Silakan menggunakan loker nomor {$speechNomor}.",
+            'speech_text' => "Silakan nomor loker {$speechNomor}.",
         ];
     }
 

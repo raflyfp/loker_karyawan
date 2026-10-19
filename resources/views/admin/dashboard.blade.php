@@ -23,10 +23,10 @@
                         <span class="text-xs font-bold uppercase tracking-wider text-[#0060b2]">Kapasitas Loker
                             Laki-laki</span>
                     </div>
-                    <span
+                    {{-- <span
                         class="text-[11px] font-semibold px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
                         Total {{ $maleTotal }} Loker
-                    </span>
+                    </span> --}}
                 </div>
                 <div class="mt-3 flex items-baseline justify-between">
                     <div>
@@ -35,7 +35,7 @@
                         <span class="text-xs text-slate-500 font-medium ml-1">Tersedia</span>
                     </div>
                     <div class="text-right text-xs space-y-0.5">
-                        <div class="text-rose-600 font-semibold">{{ $maleOccupied }} Sedang Terisi</div>
+                        <div class="text-rose-600 font-semibold">{{ $maleOccupied }} Terisi</div>
                         <div id="statMaleDisabled" class="text-slate-400">{{ $maleDisabled }} Dikunci (Maintenance)</div>
                     </div>
                 </div>
@@ -59,10 +59,10 @@
                         <span class="text-xs font-bold uppercase tracking-wider text-[#d92534]">Kapasitas Loker
                             Perempuan</span>
                     </div>
-                    <span
+                    {{-- <span
                         class="text-[11px] font-semibold px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200">
                         Total {{ $femaleTotal }} Loker
-                    </span>
+                    </span> --}}
                 </div>
                 <div class="mt-3 flex items-baseline justify-between">
                     <div>
@@ -71,7 +71,7 @@
                         <span class="text-xs text-slate-500 font-medium ml-1">Tersedia</span>
                     </div>
                     <div class="text-right text-xs space-y-0.5">
-                        <div class="text-rose-600 font-semibold">{{ $femaleOccupied }} Sedang Terisi</div>
+                        <div class="text-rose-600 font-semibold">{{ $femaleOccupied }} Terisi</div>
                         <div id="statFemaleDisabled" class="text-slate-400">{{ $femaleDisabled }} Dikunci (Maintenance)
                         </div>
                     </div>
@@ -98,10 +98,10 @@
             <!-- Header & Legend Bar -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-3 border-b border-slate-100">
                 <div>
-                    <div class="flex items-center gap-2">
+                    {{-- <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#0060b2]"></span>
                         <h2 class="text-base font-bold text-slate-900">Visualisasi Status Loker</h2>
-                    </div>
+                    </div> --}}
                     <p class="text-xs text-slate-500 mt-0.5">
                         Klik pada kotak loker mana pun untuk melihat rincian pemakai atau <strong>mengubah status Kunci
                             (Lock / Unlock)</strong>.
@@ -132,7 +132,7 @@
                     <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#0060b2]"></span>
                         <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-800">
-                            Loker Laki-laki (1 — 100)
+                            Loker Laki-laki
                         </h3>
                     </div>
                     <span id="badgeMaleTersedia"
@@ -177,7 +177,7 @@
                     <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#d92534]"></span>
                         <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-800">
-                            Loker Perempuan (1 — 100)
+                            Loker Perempuan
                         </h3>
                     </div>
                     <span id="badgeFemaleTersedia"
@@ -206,8 +206,7 @@
                             data-is-active="{{ $loker->is_active ? '1' : '0' }}"
                             data-status="{{ !$loker->is_active ? 'disabled' : ($isOccupied ? 'occupied' : 'available') }}"
                             data-karyawan="{{ $karyawanName }}" data-nik="{{ $karyawanNik }}"
-                            data-alokasi-id="{{ $alokasiId }}"
-                            title="Klik untuk atur Loker {{ $loker->kode_loker }}">
+                            data-alokasi-id="{{ $alokasiId }}" title="Klik untuk atur Loker {{ $loker->kode_loker }}">
                             <span>{{ $loker->nomor_urut }}</span>
                             @if (!$loker->is_active)
                                 <span class="text-[9px] leading-none">🔒</span>
@@ -263,8 +262,7 @@
                     @csrf
                     <button type="submit"
                         data-confirm="Lepaskan / checkout paksa loker ini sekarang? Penggunaan oleh karyawan akan diselesaikan dan loker kembali berstatus tersedia."
-                        data-confirm-title="Checkout Paksa Loker"
-                        data-confirm-text="Ya, Checkout Paksa"
+                        data-confirm-title="Checkout Paksa Loker" data-confirm-text="Ya, Checkout Paksa"
                         class="w-full py-1.5 px-3 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold transition shadow-2xs">
                         Checkout Paksa Loker
                     </button>

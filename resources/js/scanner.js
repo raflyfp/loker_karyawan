@@ -324,18 +324,10 @@ class LokerMandiriApp {
         const titleEl = document.getElementById('resultTitle');
         const numberEl = document.getElementById('resultLockerNumber');
         const codeEl = document.getElementById('resultLockerCode');
+        const subtitleEl = document.getElementById('resultStatusSubtitle');
         const nameEl = document.getElementById('resultKaryawanName');
-        const messageEl = document.getElementById('resultMessage');
-        const badgeEl = document.getElementById('resultActionBadge');
 
         const isAllocated = res.action === 'allocated';
-
-        if (badgeEl) {
-            badgeEl.textContent = isAllocated ? 'LOKER TERPILIH' : 'LOKER DIKEMBALIKAN';
-            badgeEl.className = isAllocated
-                ? 'px-4 py-1 text-sm font-bold uppercase rounded-sm bg-emerald-100 text-emerald-800'
-                : 'px-4 py-1 text-sm font-bold uppercase rounded-sm bg-blue-100 text-blue-800';
-        }
 
         if (titleEl) {
             titleEl.textContent = isAllocated ? 'Selamat Datang' : 'Terima Kasih';
@@ -344,8 +336,8 @@ class LokerMandiriApp {
         if (numberEl) {
             numberEl.textContent = res.loker.nomor_urut;
             numberEl.className = isAllocated
-                ? 'text-7xl font-extrabold text-[#d92534] tracking-tight'
-                : 'text-7xl font-extrabold text-[#0060b2] tracking-tight';
+                ? 'text-8xl sm:text-9xl font-black text-[#d92534] tracking-tight leading-none block my-2'
+                : 'text-8xl sm:text-9xl font-black text-[#0060b2] tracking-tight leading-none block my-2';
         }
 
         if (codeEl) {
@@ -353,12 +345,13 @@ class LokerMandiriApp {
             codeEl.textContent = `Loker ${res.loker.kode_loker} (${genderLabel})`;
         }
 
-        if (nameEl) {
-            nameEl.textContent = res.karyawan.nama;
+        if (subtitleEl) {
+            subtitleEl.textContent = isAllocated ? 'Kunci Berhasil Diberikan' : 'Kunci Berhasil Dikembalikan';
+            subtitleEl.className = 'mt-3 text-base sm:text-lg font-extrabold text-emerald-600 px-4 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full inline-block';
         }
 
-        if (messageEl) {
-            messageEl.textContent = res.message;
+        if (nameEl) {
+            nameEl.textContent = res.karyawan.nama;
         }
 
         this.resultModal?.classList.remove('hidden');
@@ -375,10 +368,10 @@ class LokerMandiriApp {
             clearTimeout(this.resultTimeout);
         }
 
-        // Tutup otomatis hasil modal setelah 4 detik (atau langsung tertimpa jika ada scan baru)
+        // Tutup otomatis hasil modal setelah 5 detik (atau langsung tertimpa jika ada scan baru)
         this.resultTimeout = setTimeout(() => {
             this.closeResultModal();
-        }, 4000);
+        }, 5000);
     }
 
     showErrorResult(message) {
@@ -406,7 +399,14 @@ class LokerMandiriApp {
     }
 
     setupModals() {
-        // Tombol tutup modal hasil
+        // Klik pada backdrop modal hasil untuk menutup modal
+        this.resultModal?.addEventListener('click', (e) => {
+            if (e.target === this.resultModal) {
+                this.closeResultModal();
+            }
+        });
+
+        // Tombol tutup modal hasil (jika ada)
         document.getElementById('closeResultBtn')?.addEventListener('click', () => {
             this.closeResultModal();
         });

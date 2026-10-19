@@ -114,7 +114,7 @@
                 <div class="flex items-center gap-2">
                     <span class="w-3 h-3 rounded-full bg-[#0060b2]"></span>
                     <h2 class="text-sm sm:text-base font-bold uppercase tracking-wider text-slate-900">
-                        LOKER LAKI-LAKI (1 — 100)
+                        LOKER LAKI-LAKI
                     </h2>
                 </div>
                 <div class="flex items-center gap-3">
@@ -154,7 +154,7 @@
                 <div class="flex items-center gap-2">
                     <span class="w-3 h-3 rounded-full bg-[#d92534]"></span>
                     <h2 class="text-sm sm:text-base font-bold uppercase tracking-wider text-slate-900">
-                        LOKER PEREMPUAN (1 — 100)
+                        LOKER PEREMPUAN
                     </h2>
                 </div>
                 <div class="flex items-center gap-3">
@@ -200,46 +200,39 @@
     <!-- MODAL 1: HASIL TRANSAKSI SCAN (ALOKASI / PELEPASAN)       -->
     <!-- ======================================================= -->
     <div id="resultModal"
-        class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6">
         <div
-            class="bg-white rounded-lg border border-slate-200 max-w-md w-full p-6 text-center flex flex-col items-center gap-4">
+            class="bg-white rounded-2xl border border-slate-200 max-w-lg w-full p-8 sm:p-10 text-center flex flex-col items-center gap-5 shadow-2xl transition-all">
 
-            <span id="resultActionBadge"
-                class="px-4 py-1 text-xs font-bold uppercase rounded-sm bg-emerald-100 text-emerald-800">
-                LOKER TERPILIH
-            </span>
-
-            <h3 id="resultTitle" class="text-xl font-bold text-slate-900">
-                Selamat Datang
+            <h3 id="resultTitle" class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+                Terima Kasih
             </h3>
 
             <!-- NOMOR LOKER BESAR -->
-            <div class="py-2">
-                <span class="text-xs uppercase font-semibold text-slate-400 block mb-1">Nomor Loker Anda</span>
-                <span id="resultLockerNumber" class="text-7xl font-extrabold text-[#d92534] tracking-tight">
-                    12
+            <div class="py-2 w-full">
+                <span class="text-xs sm:text-sm uppercase font-bold text-slate-400 block tracking-wider mb-2">Nomor
+                    Loker Anda</span>
+                <span id="resultLockerNumber"
+                    class="text-8xl sm:text-9xl font-black text-[#0060b2] tracking-tight leading-none block my-2">
+                    4
                 </span>
-                <span id="resultLockerCode" class="block text-sm font-semibold text-slate-600 mt-1">
-                    Loker L-12 (Laki-laki)
+                <span id="resultLockerCode" class="block text-base sm:text-lg font-bold text-slate-600 mt-2">
+                    Loker L-4 (Laki-laki)
                 </span>
+                <div id="resultStatusSubtitle"
+                    class="mt-3 text-base sm:text-lg font-extrabold text-emerald-600 px-4 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full inline-block">
+                    Kunci Berhasil Dikembalikan
+                </div>
             </div>
 
             <!-- Nama Karyawan -->
-            <div class="border-t border-b border-slate-100 py-3 w-full">
-                <span class="text-xs text-slate-500 block">Karyawan</span>
-                <span id="resultKaryawanName" class="text-base font-semibold text-slate-900">
-                    Budi Santoso
+            <div class="border-t border-slate-100 pt-4 w-full">
+                <span
+                    class="text-xs sm:text-sm text-slate-400 uppercase font-semibold tracking-wider block">Karyawan</span>
+                <span id="resultKaryawanName" class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-0.5 block">
+                    Nama Karyawan
                 </span>
             </div>
-
-            <p id="resultMessage" class="text-xs text-slate-600">
-                Silakan menggunakan loker tersebut.
-            </p>
-
-            <button type="button" id="closeResultBtn"
-                class="w-full py-2.5 text-sm font-semibold bg-slate-900 text-white rounded hover:bg-slate-800 transition">
-                Selesai / Lanjut Scan
-            </button>
         </div>
     </div>
 
@@ -316,11 +309,15 @@
                 </div>
             </div>
 
-            <div class="p-2.5 rounded bg-slate-50 border border-slate-200 text-[11px] text-slate-500 flex items-start gap-2">
-                <svg class="w-4 h-4 text-slate-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <div
+                class="p-2.5 rounded bg-slate-50 border border-slate-200 text-[11px] text-slate-500 flex items-start gap-2">
+                <svg class="w-4 h-4 text-slate-400 shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span>Penguncian atau perubahan status loker hanya dapat dilakukan oleh <strong>Administrator</strong> melalui Panel Admin.</span>
+                <span>Penguncian atau perubahan status loker hanya dapat dilakukan oleh <strong>Administrator</strong>
+                    melalui Panel Admin.</span>
             </div>
 
             <div class="pt-1">
@@ -363,7 +360,8 @@
         <div class="bg-white rounded-xl border border-slate-200 max-w-sm w-full p-6 shadow-2xl">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-red-100 text-[#d92534] flex items-center justify-center font-bold">
+                    <div
+                        class="w-8 h-8 rounded-lg bg-red-100 text-[#d92534] flex items-center justify-center font-bold">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -374,7 +372,8 @@
                         <p class="text-[11px] text-slate-500">Kelola Master Data Karyawan & Loker</p>
                     </div>
                 </div>
-                <button type="button" id="closeAdminLoginModalBtn" class="text-slate-400 hover:text-slate-700 text-lg leading-none">&times;</button>
+                <button type="button" id="closeAdminLoginModalBtn"
+                    class="text-slate-400 hover:text-slate-700 text-lg leading-none">&times;</button>
             </div>
 
             @if (isset($errors) && $errors->any())
@@ -387,14 +386,16 @@
                 @csrf
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Username</label>
+                    <label
+                        class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Username</label>
                     <input type="text" name="username" value="{{ old('username', 'admin') }}" required
                         placeholder="Username admin..."
                         class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#d92534]">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Password</label>
+                    <label
+                        class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Password</label>
                     <div class="relative">
                         <input type="password" id="modalPasswordInput" name="password" required
                             placeholder="Password admin..."
@@ -408,7 +409,8 @@
 
                 <div class="flex items-center justify-between text-xs pt-1">
                     <label class="flex items-center gap-1.5 text-slate-600 cursor-pointer">
-                        <input type="checkbox" name="remember" class="rounded border-slate-300 text-[#d92534] focus:ring-[#d92534]">
+                        <input type="checkbox" name="remember"
+                            class="rounded border-slate-300 text-[#d92534] focus:ring-[#d92534]">
                         <span>Ingat saya</span>
                     </label>
                     <span class="text-[11px] text-slate-400 font-mono">admin / adminsna</span>
