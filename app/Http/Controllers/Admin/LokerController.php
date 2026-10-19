@@ -137,9 +137,15 @@ class LokerController extends Controller
     /**
      * Toggle status aktif / maintenance loker secara cepat.
      */
-    public function toggleActive(Loker $loker): RedirectResponse
+    public function toggleActive(Loker $loker)
     {
         if ($loker->alokasiAktif()->exists() && $loker->is_active) {
+            if (request()->wantsJson() || request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Loker {$loker->kode_loker} sedang aktif digunakan dan tidak dapat dinonaktifkan.",
+                ], 422);
+            }
             return redirect()->route('admin.loker.index')
                 ->with('error', "Loker {$loker->kode_loker} sedang aktif digunakan dan tidak dapat dinonaktifkan.");
         }
@@ -147,7 +153,17 @@ class LokerController extends Controller
         $loker->is_active = !$loker->is_active;
         $loker->save();
 
-        $statusText = $loker->is_active ? 'diaktifkan' : 'dinonaktifkan/dikunci';
+        $statusText = $loker->is_active ? 'diaktifkan (buka kunci)' : 'dinonaktifkan (dikunci)';
+
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'is_active' => $loker->is_active,
+                'kode_loker' => $loker->kode_loker,
+                'status' => $loker->is_active ? 'available' : 'disabled',
+                'message' => "Loker {$loker->kode_loker} berhasil {$statusText}.",
+            ]);
+        }
 
         return redirect()->back()
             ->with('success', "Loker {$loker->kode_loker} berhasil {$statusText}.");

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\LokerController as AdminLokerController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\LokerController;
 use App\Http\Controllers\LokerScanController;
 use Illuminate\Support\Facades\Route;
@@ -43,5 +44,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Alokasi & Riwayat Transaksi
         Route::get('/alokasi', [AlokasiController::class, 'index'])->name('alokasi.index');
         Route::post('/alokasi/{alokasi}/force-release', [AlokasiController::class, 'forceRelease'])->name('alokasi.force-release');
+
+        // Laporan Pemakaian Loker & Export Excel
+        Route::get('/report', [ReportController::class, 'index'])->name('report.index');
+        Route::get('/report/export', [ReportController::class, 'exportExcel'])->name('report.export');
     });
 });

@@ -40,30 +40,29 @@ class DashboardController extends Controller
         $maleAvailable = $maleTotal - $maleOccupied - $maleDisabled;
         $femaleAvailable = $femaleTotal - $femaleOccupied - $femaleDisabled;
 
-        $totalKaryawan = Karyawan::count();
-        $karyawanAktif = Karyawan::where('is_active', true)->count();
-        $karyawanGenderNull = Karyawan::whereNull('gender')->count();
+        // Visualisasi Loker 1..100 Laki-laki & Perempuan
+        $maleLockers = Loker::with('alokasiAktif.karyawan:id,nama,nik')
+            ->where('gender_group', 'L')
+            ->orderBy('nomor_urut')
+            ->get();
 
-        $recentAllocations = AlokasiLoker::with(['karyawan', 'loker'])
-            ->orderByDesc('id')
-            ->take(10)
+        $femaleLockers = Loker::with('alokasiAktif.karyawan:id,nama,nik')
+            ->where('gender_group', 'P')
+            ->orderBy('nomor_urut')
             ->get();
 
         return view('admin.dashboard', compact(
             'totalLoker',
             'maleTotal',
             'femaleTotal',
-            'activeAllocations',
             'maleOccupied',
             'femaleOccupied',
             'maleDisabled',
             'femaleDisabled',
             'maleAvailable',
             'femaleAvailable',
-            'totalKaryawan',
-            'karyawanAktif',
-            'karyawanGenderNull',
-            'recentAllocations'
+            'maleLockers',
+            'femaleLockers'
         ));
     }
 }
