@@ -172,6 +172,10 @@
                                             class="inline m-0">
                                             @csrf
                                             <button type="submit"
+                                                data-confirm="{{ $item->is_active ? 'Kunci loker ' . $item->kode_loker . '? Loker yang dikunci tidak dapat dipilih oleh karyawan saat scan kartu.' : 'Buka kunci loker ' . $item->kode_loker . '? Loker akan kembali aktif dan dapat dialokasikan.' }}"
+                                                data-confirm-title="{{ $item->is_active ? 'Kunci Loker' : 'Buka Kunci Loker' }}"
+                                                data-confirm-text="{{ $item->is_active ? 'Ya, Kunci' : 'Ya, Buka Kunci' }}"
+                                                data-confirm-danger="{{ $item->is_active ? 'true' : 'false' }}"
                                                 class="px-2 py-1 text-[11px] font-semibold rounded transition {{ $item->is_active ? 'bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-200' : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200' }}"
                                                 title="{{ $item->is_active ? 'Kunci loker untuk pemeliharaan' : 'Buka kunci loker' }}">
                                                 {{ $item->is_active ? 'Kunci' : 'Buka Kunci' }}
@@ -193,7 +197,9 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                onclick="return confirm('Apakah Anda yakin ingin menghapus loker {{ $item->kode_loker }}?');"
+                                                data-confirm="Apakah Anda yakin ingin menghapus loker {{ $item->kode_loker }} (#{{ $item->nomor_urut }}) dari database master?"
+                                                data-confirm-title="Hapus Loker"
+                                                data-confirm-text="Ya, Hapus"
                                                 {{ $isOccupied ? 'disabled' : '' }}
                                                 class="px-2 py-1 text-[11px] font-semibold rounded transition {{ $isOccupied ? 'opacity-40 cursor-not-allowed bg-slate-100 text-slate-400' : 'text-rose-700 bg-rose-50 hover:bg-rose-100' }}">
                                                 Hapus
@@ -213,8 +219,8 @@
                 </table>
             </div>
 
-            @if ($lokers->hasPages())
-                <div class="p-3 border-t border-slate-200 bg-slate-50">
+            @if ($lokers->total() > 0)
+                <div class="p-3.5 border-t border-slate-200 bg-slate-50/80">
                     {{ $lokers->links() }}
                 </div>
             @endif

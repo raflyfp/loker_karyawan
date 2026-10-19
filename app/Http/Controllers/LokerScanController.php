@@ -87,28 +87,4 @@ class LokerScanController extends Controller
             'female' => $female,
         ]);
     }
-
-    /**
-     * Mengunci atau menonaktifkan loker dari master.
-     */
-    public function toggleActive(int $id): JsonResponse
-    {
-        $loker = Loker::findOrFail($id);
-
-        if ($loker->alokasiAktif()->exists() && $loker->is_active) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Loker sedang aktif digunakan dan tidak dapat dinonaktifkan.',
-            ], 422);
-        }
-
-        $loker->is_active = !$loker->is_active;
-        $loker->save();
-
-        return response()->json([
-            'success' => true,
-            'message' => "Loker {$loker->kode_loker} berhasil " . ($loker->is_active ? 'diaktifkan' : 'dinonaktifkan/dikunci') . '.',
-            'is_active' => $loker->is_active,
-        ]);
-    }
 }

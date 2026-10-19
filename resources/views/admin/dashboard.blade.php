@@ -261,8 +261,11 @@
 
                 <form id="modalForceReleaseForm" method="POST" action="" class="pt-2">
                     @csrf
-                    <button type="submit" onclick="return confirm('Lepaskan / checkout paksa loker ini sekarang?');"
-                        class="w-full py-1.5 px-3 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold transition">
+                    <button type="submit"
+                        data-confirm="Lepaskan / checkout paksa loker ini sekarang? Penggunaan oleh karyawan akan diselesaikan dan loker kembali berstatus tersedia."
+                        data-confirm-title="Checkout Paksa Loker"
+                        data-confirm-text="Ya, Checkout Paksa"
+                        class="w-full py-1.5 px-3 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold transition shadow-2xs">
                         Checkout Paksa Loker
                     </button>
                 </form>
@@ -439,12 +442,43 @@
 
                         // Update modal state in place
                         openModalForLocker(currentLockerElement);
+
+                        if (window.Swal) {
+                            window.Swal.fire({
+                                icon: 'success',
+                                title: 'Status Loker Diperbarui',
+                                text: data.message,
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true
+                            });
+                        }
                     } else {
-                        alert(data.message || 'Gagal mengubah status kunci loker.');
+                        if (window.Swal) {
+                            window.Swal.fire({
+                                icon: 'error',
+                                title: 'Perhatian',
+                                text: data.message || 'Gagal mengubah status kunci loker.',
+                                confirmButtonColor: '#d92534'
+                            });
+                        } else {
+                            alert(data.message || 'Gagal mengubah status kunci loker.');
+                        }
                     }
                 } catch (err) {
                     console.error(err);
-                    alert('Terjadi kesalahan koneksi saat mengunci/membuka loker.');
+                    if (window.Swal) {
+                        window.Swal.fire({
+                            icon: 'error',
+                            title: 'Kesalahan Jaringan',
+                            text: 'Terjadi kesalahan koneksi saat mengunci/membuka loker.',
+                            confirmButtonColor: '#d92534'
+                        });
+                    } else {
+                        alert('Terjadi kesalahan koneksi saat mengunci/membuka loker.');
+                    }
                 } finally {
                     toggleLockBtn.disabled = false;
                     toggleLockBtn.classList.remove('opacity-70');

@@ -243,8 +243,8 @@
                 </table>
             </div>
 
-            @if ($alokasis->hasPages())
-                <div class="p-4 border-t border-slate-200 bg-slate-50">
+            @if ($alokasis->total() > 0)
+                <div class="p-3.5 border-t border-slate-200 bg-slate-50/80">
                     {{ $alokasis->links() }}
                 </div>
             @endif

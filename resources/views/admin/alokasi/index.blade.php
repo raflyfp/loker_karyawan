@@ -145,7 +145,9 @@
                                             class="inline m-0">
                                             @csrf
                                             <button type="submit"
-                                                onclick="return confirm('Paksa pelepasan loker {{ $item->loker->kode_loker ?? '' }} untuk karyawan {{ $item->karyawan->nama ?? '' }}? Loker akan kembali berstatus tersedia.');"
+                                                data-confirm="Paksa pelepasan loker {{ $item->loker->kode_loker ?? '' }} untuk karyawan {{ $item->karyawan->nama ?? '' }}? Loker akan langsung dikembalikan dan berstatus tersedia."
+                                                data-confirm-title="Paksa Pelepasan Loker"
+                                                data-confirm-text="Ya, Lepaskan Loker"
                                                 class="px-2.5 py-1 text-[11px] font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded transition shadow-2xs"
                                                 title="Checkout / Lepaskan loker jika karyawan lupa tap out atau kartu hilang">
                                                 Paksa Lepas
@@ -167,8 +169,8 @@
                 </table>
             </div>
 
-            @if ($alokasis->hasPages())
-                <div class="p-3 border-t border-slate-200 bg-slate-50">
+            @if ($alokasis->total() > 0)
+                <div class="p-3.5 border-t border-slate-200 bg-slate-50/80">
                     {{ $alokasis->links() }}
                 </div>
             @endif

@@ -14,6 +14,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- SweetAlert2 Fallback CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body
@@ -154,7 +156,11 @@
                 <form method="POST" action="{{ route('admin.logout') }}" class="m-0">
                     @csrf
                     <button type="submit"
-                        onclick="return confirm('Apakah Anda yakin ingin keluar dari Admin Panel?');"
+                        data-confirm="Apakah Anda yakin ingin keluar dari Admin Panel?"
+                        data-confirm-title="Konfirmasi Logout"
+                        data-confirm-text="Ya, Keluar"
+                        data-cancel-text="Batal"
+                        data-confirm-danger="true"
                         class="p-1.5 text-rose-400 hover:text-white hover:bg-rose-600/30 rounded-md transition"
                         title="Keluar / Logout">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -198,51 +204,7 @@
 
         </header>
 
-        <!-- FLASH MESSAGES -->
-        <div class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-            @if (session('success'))
-                <div
-                    class="flex items-center justify-between p-3.5 mb-3 text-sm font-medium text-emerald-800 bg-emerald-50 border border-emerald-300 rounded-lg shadow-2xs">
-                    <div class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ session('success') }}</span>
-                    </div>
-                    <button type="button" onclick="this.parentElement.remove()"
-                        class="text-emerald-700 hover:text-emerald-950 font-bold ml-2">&times;</button>
-                </div>
-            @endif
 
-            @if (session('error'))
-                <div
-                    class="flex items-center justify-between p-3.5 mb-3 text-sm font-medium text-rose-800 bg-rose-50 border border-rose-300 rounded-lg shadow-2xs">
-                    <div class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-rose-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ session('error') }}</span>
-                    </div>
-                    <button type="button" onclick="this.parentElement.remove()"
-                        class="text-rose-700 hover:text-rose-950 font-bold ml-2">&times;</button>
-                </div>
-            @endif
-
-            @if (isset($errors) && $errors->any())
-                <div class="p-3.5 mb-3 text-sm text-rose-800 bg-rose-50 border border-rose-300 rounded-lg shadow-2xs">
-                    <div class="font-semibold mb-1">Terdapat kesalahan validasi:</div>
-                    <ul class="list-disc list-inside space-y-0.5 text-xs">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-        </div>
 
         <!-- MAIN PAGE CONTENT -->
         <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5">
@@ -258,7 +220,7 @@
 
     </div>
 
-    <!-- SIDEBAR MOBILE TOGGLE SCRIPT -->
+    <!-- SIDEBAR MOBILE TOGGLE & SWEETALERT2 GLOBAL SCRIPTS -->
     <script>
         const sidebar = document.getElementById('adminSidebar');
         const backdrop = document.getElementById('sidebarBackdrop');
@@ -278,7 +240,106 @@
         openBtn?.addEventListener('click', openSidebar);
         closeBtn?.addEventListener('click', closeSidebar);
         backdrop?.addEventListener('click', closeSidebar);
+
+        // Global SweetAlert2 Confirm Handler for any element with data-confirm
+        document.addEventListener('click', function(e) {
+            const trigger = e.target.closest('[data-confirm]');
+            if (!trigger) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            const message = trigger.getAttribute('data-confirm') || 'Apakah Anda yakin ingin melanjutkan tindakan ini?';
+            const title = trigger.getAttribute('data-confirm-title') || 'Konfirmasi';
+            const confirmText = trigger.getAttribute('data-confirm-text') || 'Ya, Lanjutkan';
+            const cancelText = trigger.getAttribute('data-cancel-text') || 'Batal';
+            const isDanger = trigger.getAttribute('data-confirm-danger') !== 'false';
+
+            if (window.Swal) {
+                Swal.fire({
+                    title: title,
+                    text: message,
+                    icon: isDanger ? 'warning' : 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: isDanger ? '#d92534' : '#0060b2',
+                    cancelButtonColor: '#64748b',
+                    confirmButtonText: confirmText,
+                    cancelButtonText: cancelText,
+                    reverseButtons: true,
+                    focusCancel: isDanger,
+                    borderRadius: '8px',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const form = trigger.form || trigger.closest('form');
+                        if (trigger.tagName === 'A') {
+                            window.location.href = trigger.href;
+                        } else if (form) {
+                            form.submit();
+                        }
+                    }
+                });
+            } else {
+                if (confirm(message)) {
+                    const form = trigger.form || trigger.closest('form');
+                    if (trigger.tagName === 'A') {
+                        window.location.href = trigger.href;
+                    } else if (form) {
+                        form.submit();
+                    }
+                }
+            }
+        });
     </script>
+
+    <!-- SweetAlert2 Flash Notifications -->
+    @if (session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                if (window.Swal) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: @json(session('success')),
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3500,
+                        timerProgressBar: true
+                    });
+                }
+            });
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                if (window.Swal) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Perhatian',
+                        text: @json(session('error')),
+                        confirmButtonColor: '#d92534'
+                    });
+                }
+            });
+        </script>
+    @endif
+
+    @if (isset($errors) && $errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                if (window.Swal) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Periksa Data Formulir',
+                        html: `{!! implode('<br>', array_map('e', $errors->all())) !!}`,
+                        confirmButtonColor: '#d92534'
+                    });
+                }
+            });
+        </script>
+    @endif
 
     @stack('scripts')
 </body>

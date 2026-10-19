@@ -17,7 +17,10 @@
                 <form method="POST" action="{{ route('admin.karyawan.sync') }}" class="m-0">
                     @csrf
                     <button type="submit"
-                        onclick="return confirm('Mulai sinkronisasi master karyawan dengan API SNA Medika?');"
+                        data-confirm="Mulai sinkronisasi master karyawan dengan API SNA Medika? Proses ini akan memperbarui data karyawan dari server pusat."
+                        data-confirm-title="Sinkronisasi Data Karyawan"
+                        data-confirm-text="Ya, Sinkronkan"
+                        data-confirm-danger="false"
                         class="px-3.5 py-2 text-xs font-semibold text-[#0060b2] bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-md transition flex items-center gap-1.5 shadow-2xs">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -190,7 +193,9 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                onclick="return confirm('Hapus karyawan {{ $item->nama }} ({{ $item->nik }})? Pastikan karyawan tidak memiliki loker aktif.');"
+                                                data-confirm="Apakah Anda yakin ingin menghapus data karyawan {{ $item->nama }} (NIK: {{ $item->nik }})? Pastikan karyawan tidak sedang menggunakan loker."
+                                                data-confirm-title="Hapus Data Karyawan"
+                                                data-confirm-text="Ya, Hapus Data"
                                                 class="px-2 py-1 text-[11px] font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 rounded transition">
                                                 Hapus
                                             </button>
@@ -209,8 +214,8 @@
                 </table>
             </div>
 
-            @if ($karyawans->hasPages())
-                <div class="p-3 border-t border-slate-200 bg-slate-50">
+            @if ($karyawans->total() > 0)
+                <div class="p-3.5 border-t border-slate-200 bg-slate-50/80">
                     {{ $karyawans->links() }}
                 </div>
             @endif

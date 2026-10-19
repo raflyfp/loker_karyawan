@@ -14,6 +14,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- SweetAlert2 Fallback CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body
@@ -285,39 +287,45 @@
     </div>
 
     <!-- ======================================================= -->
-    <!-- MODAL 3: DETAIL LOKER & TOGGLE LOCK (ADMIN/MASTER)       -->
+    <!-- MODAL 3: DETAIL LOKER (INFORMASI UNTUK KARYAWAN)        -->
     <!-- ======================================================= -->
     <div id="detailModal"
         class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg border border-slate-200 max-w-sm w-full p-5 flex flex-col gap-4">
+        <div class="bg-white rounded-lg border border-slate-200 max-w-sm w-full p-5 flex flex-col gap-4 shadow-xl">
             <div class="flex items-center justify-between border-b border-slate-100 pb-2">
-                <h3 class="text-sm font-bold text-slate-900">Rincian Loker</h3>
+                <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-[#0060b2]"></div>
+                    <h3 class="text-sm font-bold text-slate-900">Informasi Loker</h3>
+                </div>
                 <span id="detailLockerCode"
-                    class="text-xs font-semibold px-2 py-0.5 bg-slate-100 rounded text-slate-700">L-01</span>
+                    class="text-xs font-bold px-2 py-0.5 bg-slate-100 rounded text-slate-700 font-mono">L-01</span>
             </div>
 
-            <div class="text-xs space-y-2">
-                <div class="flex justify-between py-1 border-b border-slate-50">
-                    <span class="text-slate-500">Nomor Tampilan:</span>
-                    <span id="detailLockerNumber" class="font-bold text-slate-900 text-sm">1</span>
+            <div class="text-xs space-y-2.5">
+                <div class="flex justify-between items-center py-1 border-b border-slate-100">
+                    <span class="text-slate-500 font-medium">Nomor Loker:</span>
+                    <span id="detailLockerNumber" class="font-extrabold text-slate-900 text-base">1</span>
                 </div>
-                <div class="flex justify-between py-1 border-b border-slate-50">
-                    <span class="text-slate-500">Kelompok:</span>
+                <div class="flex justify-between items-center py-1 border-b border-slate-100">
+                    <span class="text-slate-500 font-medium">Kelompok:</span>
                     <span id="detailLockerGender" class="font-semibold text-slate-900">Laki-laki</span>
                 </div>
-                <div class="flex justify-between py-1 border-b border-slate-50">
-                    <span class="text-slate-500">Status Saat Ini:</span>
-                    <span id="detailLockerStatus" class="font-semibold text-slate-900">Tersedia</span>
+                <div class="flex justify-between items-center py-1 border-b border-slate-100">
+                    <span class="text-slate-500 font-medium">Status Saat Ini:</span>
+                    <span id="detailLockerStatus" class="font-bold text-slate-900">Tersedia</span>
                 </div>
             </div>
 
-            <div class="flex flex-col gap-2 pt-2">
-                <button type="button" id="toggleActiveBtn"
-                    class="w-full py-2 text-xs font-semibold bg-amber-600 hover:bg-amber-700 text-white rounded transition">
-                    Kunci / Nonaktifkan Loker
-                </button>
+            <div class="p-2.5 rounded bg-slate-50 border border-slate-200 text-[11px] text-slate-500 flex items-start gap-2">
+                <svg class="w-4 h-4 text-slate-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Penguncian atau perubahan status loker hanya dapat dilakukan oleh <strong>Administrator</strong> melalui Panel Admin.</span>
+            </div>
+
+            <div class="pt-1">
                 <button type="button" id="closeDetailBtn"
-                    class="w-full py-1.5 text-xs text-slate-600 hover:text-slate-900 transition">
+                    class="w-full py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded transition shadow-xs">
                     Tutup
                 </button>
             </div>

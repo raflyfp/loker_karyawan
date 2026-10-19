@@ -216,7 +216,17 @@ class LokerMandiriApp {
             );
         } catch (err) {
             console.error('Kamera gagal dibuka:', err);
-            alert('Tidak dapat mengakses kamera: ' + (err.message || 'Periksa izin kamera Anda.'));
+            const errMsg = 'Tidak dapat mengakses kamera: ' + (err.message || 'Periksa izin kamera Anda.');
+            if (window.Swal) {
+                window.Swal.fire({
+                    icon: 'warning',
+                    title: 'Akses Kamera',
+                    text: errMsg,
+                    confirmButtonColor: '#0060b2'
+                });
+            } else {
+                alert(errMsg);
+            }
             this.stopCamera();
         }
     }
@@ -373,7 +383,18 @@ class LokerMandiriApp {
 
     showErrorResult(message) {
         this.playChime('error');
-        alert(message);
+        if (window.Swal) {
+            window.Swal.fire({
+                icon: 'error',
+                title: 'Perhatian',
+                text: message,
+                confirmButtonColor: '#d92534',
+                timer: 3500,
+                timerProgressBar: true
+            });
+        } else {
+            alert(message);
+        }
         this.setIndicator(message, 'error');
         this.barcodeInput?.focus();
     }
@@ -420,32 +441,6 @@ class LokerMandiriApp {
         document.getElementById('closeDetailBtn')?.addEventListener('click', () => {
             this.detailModal?.classList.add('hidden');
             this.barcodeInput?.focus();
-        });
-
-        // Toggle aktif/kunci loker
-        document.getElementById('toggleActiveBtn')?.addEventListener('click', async () => {
-            if (!this.activeLockerBox) return;
-            const lockerId = this.activeLockerBox.dataset.id;
-            try {
-                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-                const res = await fetch(`/api/loker/${lockerId}/toggle-active`, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken || '',
-                    },
-                });
-                const data = await res.json();
-                if (data.success) {
-                    alert(data.message);
-                    this.detailModal?.classList.add('hidden');
-                    this.refreshStatusMap();
-                } else {
-                    alert(data.message || 'Gagal mengubah status loker.');
-                }
-            } catch (err) {
-                alert('Gagal menghubungi server.');
-            }
         });
 
         // Modal Login Admin
@@ -514,13 +509,7 @@ class LokerMandiriApp {
         document.getElementById('detailLockerGender').textContent = gender;
         document.getElementById('detailLockerStatus').textContent =
             status === 'occupied' ? 'Terisi (' + karyawan + ')' :
-                status === 'disabled' ? 'Dinonaktifkan / Dikunci' : 'Tersedia';
-
-        const toggleBtn = document.getElementById('toggleActiveBtn');
-        if (toggleBtn) {
-            toggleBtn.textContent = status === 'disabled' ? 'Aktifkan Loker Ini' : 'Kunci / Nonaktifkan Loker';
-            toggleBtn.disabled = (status === 'occupied');
-        }
+                status === 'disabled' ? 'Dinonaktifkan / Dikunci Admin' : 'Tersedia';
 
         this.detailModal?.classList.remove('hidden');
     }
