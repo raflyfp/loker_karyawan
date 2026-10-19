@@ -23,11 +23,15 @@ class ReportController extends Controller
      */
     public function index(Request $request): View
     {
-        $startDate = $request->input('start_date', now()->startOfMonth()->format('Y-m-d'));
+        $startDate = $request->input('start_date', now()->format('Y-m-d'));
         $endDate = $request->input('end_date', now()->format('Y-m-d'));
         $gender = $request->input('gender');
         $status = $request->input('status');
         $search = trim($request->input('search', ''));
+        $perPage = (int) $request->input('per_page', 10);
+        if (!in_array($perPage, [10, 25, 50, 100])) {
+            $perPage = 10;
+        }
 
         $query = $this->buildReportQuery($startDate, $endDate, $gender, $status, $search);
 
@@ -70,7 +74,7 @@ class ReportController extends Controller
         // Data transaksi dipaginasi
         $alokasis = (clone $query)
             ->orderByDesc('waktu_masuk')
-            ->paginate(25)
+            ->paginate($perPage)
             ->withQueryString();
 
         return view('admin.report.index', compact(
@@ -80,6 +84,7 @@ class ReportController extends Controller
             'gender',
             'status',
             'search',
+            'perPage',
             'totalUsage',
             'activeUsage',
             'completedUsage',
@@ -94,7 +99,7 @@ class ReportController extends Controller
      */
     public function exportExcel(Request $request): StreamedResponse
     {
-        $startDate = $request->input('start_date', now()->startOfMonth()->format('Y-m-d'));
+        $startDate = $request->input('start_date', now()->format('Y-m-d'));
         $endDate = $request->input('end_date', now()->format('Y-m-d'));
         $gender = $request->input('gender');
         $status = $request->input('status');

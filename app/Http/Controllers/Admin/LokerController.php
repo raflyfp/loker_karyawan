@@ -44,9 +44,14 @@ class LokerController extends Controller
             }
         }
 
+        $perPage = (int) $request->input('per_page', 10);
+        if (!in_array($perPage, [10, 25, 50, 100])) {
+            $perPage = 10;
+        }
+
         $lokers = $query->orderBy('gender_group', 'asc')
             ->orderBy('nomor_urut', 'asc')
-            ->paginate(30)
+            ->paginate($perPage)
             ->withQueryString();
 
         $stats = [

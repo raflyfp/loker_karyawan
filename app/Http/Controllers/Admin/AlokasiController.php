@@ -42,7 +42,12 @@ class AlokasiController extends Controller
             $query->whereDate('waktu_masuk', $date);
         }
 
-        $alokasis = $query->orderByDesc('id')->paginate(25)->withQueryString();
+        $perPage = (int) $request->input('per_page', 10);
+        if (!in_array($perPage, [10, 25, 50, 100])) {
+            $perPage = 10;
+        }
+
+        $alokasis = $query->orderByDesc('id')->paginate($perPage)->withQueryString();
 
         $stats = [
             'total' => AlokasiLoker::count(),

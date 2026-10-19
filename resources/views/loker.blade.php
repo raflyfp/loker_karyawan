@@ -72,15 +72,15 @@
                         <span>Admin Panel</span>
                     </a>
                 @else
-                    <button type="button" id="openAdminLoginModalBtn"
+                    <a href="{{ route('admin.login') }}"
                         class="px-3 py-2 text-sm font-semibold bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 rounded transition flex items-center gap-1.5 shrink-0 shadow-2xs"
-                        title="Login Administrator untuk Kelola Master Data">
+                        title="Buka Halaman Login Administrator">
                         <svg class="w-4 h-4 text-[#d92534]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                         <span>Login Admin</span>
-                    </button>
+                    </a>
                 @endauth
             </div>
         </div>
@@ -351,101 +351,6 @@
             </p>
         </div>
     </div>
-
-    <!-- ======================================================= -->
-    <!-- MODAL 5: LOGIN ADMINISTRATOR                             -->
-    <!-- ======================================================= -->
-    <div id="adminLoginModal"
-        class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl border border-slate-200 max-w-sm w-full p-6 shadow-2xl">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                <div class="flex items-center gap-2.5">
-                    <div
-                        class="w-8 h-8 rounded-lg bg-red-100 text-[#d92534] flex items-center justify-center font-bold">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-900">Login Administrator</h3>
-                        <p class="text-[11px] text-slate-500">Kelola Master Data Karyawan & Loker</p>
-                    </div>
-                </div>
-                <button type="button" id="closeAdminLoginModalBtn"
-                    class="text-slate-400 hover:text-slate-700 text-lg leading-none">&times;</button>
-            </div>
-
-            @if (isset($errors) && $errors->any())
-                <div class="mt-3 p-2.5 text-xs font-semibold text-rose-800 bg-rose-50 border border-rose-300 rounded">
-                    {{ $errors->first() }}
-                </div>
-            @endif
-
-            <form method="POST" action="{{ route('admin.login.submit') }}" class="mt-4 space-y-3.5">
-                @csrf
-
-                <div>
-                    <label
-                        class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Username</label>
-                    <input type="text" name="username" value="{{ old('username', 'admin') }}" required
-                        placeholder="Username admin..."
-                        class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#d92534]">
-                </div>
-
-                <div>
-                    <label
-                        class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Password</label>
-                    <div class="relative">
-                        <input type="password" id="modalPasswordInput" name="password" required
-                            placeholder="Password admin..."
-                            class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#d92534]">
-                        <button type="button" id="toggleModalPasswordBtn"
-                            class="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-600 text-xs">
-                            Lihat
-                        </button>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-between text-xs pt-1">
-                    <label class="flex items-center gap-1.5 text-slate-600 cursor-pointer">
-                        <input type="checkbox" name="remember"
-                            class="rounded border-slate-300 text-[#d92534] focus:ring-[#d92534]">
-                        <span>Ingat saya</span>
-                    </label>
-                    <span class="text-[11px] text-slate-400 font-mono">admin / adminsna</span>
-                </div>
-
-                <div class="pt-2 flex flex-col gap-2">
-                    <button type="submit"
-                        class="w-full py-2.5 text-xs font-bold text-white bg-[#d92534] hover:bg-[#b91c2b] rounded shadow-xs transition flex items-center justify-center gap-1.5">
-                        <span>Masuk ke Panel Admin</span>
-                        <span>&rarr;</span>
-                    </button>
-                    <button type="button" id="cancelAdminLoginModalBtn"
-                        class="w-full py-1.5 text-xs text-slate-500 hover:text-slate-800 transition">
-                        Batal
-                    </button>
-                    <a href="{{ route('admin.login') }}"
-                        class="text-[11px] text-center text-[#0060b2] hover:underline pt-1">
-                        Atau buka halaman login khusus &rarr;
-                    </a>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    @if (isset($errors) && $errors->any())
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const modal = document.getElementById('adminLoginModal');
-                if (modal) {
-                    modal.classList.remove('hidden');
-                    document.getElementById('modalPasswordInput')?.focus();
-                }
-            });
-        </script>
-    @endif
 
 </body>
 

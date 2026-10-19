@@ -43,7 +43,12 @@ class KaryawanController extends Controller
             $query->where('is_active', (bool) $request->input('is_active'));
         }
 
-        $karyawans = $query->orderBy('nama', 'asc')->paginate(20)->withQueryString();
+        $perPage = (int) $request->input('per_page', 10);
+        if (!in_array($perPage, [10, 25, 50, 100])) {
+            $perPage = 10;
+        }
+
+        $karyawans = $query->orderBy('nama', 'asc')->paginate($perPage)->withQueryString();
 
         $stats = [
             'total' => Karyawan::count(),
