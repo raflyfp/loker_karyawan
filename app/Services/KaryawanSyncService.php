@@ -60,6 +60,7 @@ class KaryawanSyncService
 
                 $nik = trim((string) $item['nik']);
                 $nama = trim((string) ($item['nama'] ?? ''));
+                $nama = preg_replace('/^[^A-Za-z0-9]+/u', '', $nama) ?: $nama;
 
                 // Jika di masa depan API menambahkan field jenis kelamin / gender, kita baca
                 $apiGender = null;
@@ -75,6 +76,16 @@ class KaryawanSyncService
                 // Prioritaskan gender yang sudah ada di lokal jika ada, atau gunakan dari API jika ada
                 $gender = $existingGenders[$nik] ?? $apiGender;
 
+                // Ekstrak URL QR Code resmi dari respons API
+                $qrCodeUrl = null;
+                if (!empty($item['qr_code'])) {
+                    if (is_array($item['qr_code'])) {
+                        $qrCodeUrl = $item['qr_code']['image_url'] ?? $item['qr_code']['api_url'] ?? null;
+                    } elseif (is_string($item['qr_code'])) {
+                        $qrCodeUrl = $item['qr_code'];
+                    }
+                }
+
                 $records[] = [
                     'nik' => $nik,
                     'api_id' => isset($item['id']) ? (int) $item['id'] : null,
@@ -82,6 +93,7 @@ class KaryawanSyncService
                     'divisi' => isset($item['divisi']) ? trim((string) $item['divisi']) : null,
                     'jabatan' => isset($item['jabatan']) ? trim((string) $item['jabatan']) : null,
                     'gender' => $gender,
+                    'qr_code_url' => $qrCodeUrl,
                     'is_active' => true,
                     'synced_at' => $now,
                     'created_at' => $now,
@@ -93,7 +105,7 @@ class KaryawanSyncService
                 Karyawan::upsert(
                     $records,
                     ['nik'],
-                    ['api_id', 'nama', 'divisi', 'jabatan', 'gender', 'is_active', 'synced_at', 'updated_at']
+                    ['api_id', 'nama', 'divisi', 'jabatan', 'gender', 'qr_code_url', 'is_active', 'synced_at', 'updated_at']
                 );
                 $totalSynced += count($records);
             }

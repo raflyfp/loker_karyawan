@@ -61,9 +61,11 @@ class LokerScanController extends Controller
                 'id' => $loker->id,
                 'nomor' => $loker->nomor_urut,
                 'kode' => $loker->kode_loker,
-                'is_active' => $loker->is_active,
+                'is_active' => (bool) $loker->is_active,
                 'status' => !$loker->is_active ? 'disabled' : ($isOccupied ? 'occupied' : 'available'),
                 'karyawan_nama' => $isOccupied ? $loker->alokasiAktif->karyawan->nama : null,
+                'karyawan_nik' => $isOccupied ? $loker->alokasiAktif->karyawan->nik : null,
+                'alokasi_id' => $isOccupied ? $loker->alokasiAktif->id : null,
             ];
 
             if ($loker->gender_group === 'L') {
@@ -79,9 +81,11 @@ class LokerScanController extends Controller
                 'total_male' => count($male),
                 'occupied_male' => collect($male)->where('status', 'occupied')->count(),
                 'available_male' => collect($male)->where('status', 'available')->count(),
+                'disabled_male' => collect($male)->where('status', 'disabled')->count(),
                 'total_female' => count($female),
                 'occupied_female' => collect($female)->where('status', 'occupied')->count(),
                 'available_female' => collect($female)->where('status', 'available')->count(),
+                'disabled_female' => collect($female)->where('status', 'disabled')->count(),
             ],
             'male' => $male,
             'female' => $female,

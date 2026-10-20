@@ -126,7 +126,16 @@
                         @forelse ($karyawans as $item)
                             <tr class="hover:bg-slate-50/70 transition">
                                 <td class="py-3 px-4 font-mono font-bold text-slate-900 whitespace-nowrap">
-                                    {{ $item->nik }}
+                                    <div class="flex items-center gap-2">
+                                        <span>{{ $item->nik }}</span>
+                                        <button type="button" class="btnShowQr p-1 text-slate-400 hover:text-[#0060b2] hover:bg-blue-50 rounded transition"
+                                            data-nik="{{ $item->nik }}" data-nama="{{ $item->nama }}" data-qr-url="{{ $item->qr_code_url }}" title="Lihat QR Code Resmi {{ $item->nama }}">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </td>
                                 <td class="py-3 px-4 font-semibold text-slate-900 whitespace-nowrap">
                                     {{ $item->nama }}
@@ -412,6 +421,66 @@
 
             document.getElementById('closeEditModalBtn')?.addEventListener('click', () => editModal.classList.add('hidden'));
             document.getElementById('cancelEditModalBtn')?.addEventListener('click', () => editModal.classList.add('hidden'));
+
+            // =======================================================
+            // QR CODE & BARCODE MODAL PREVIEW LOGIC
+            // =======================================================
+            const qrModal = document.getElementById('qrModal');
+            const qrModalNama = document.getElementById('qrModalNama');
+            const qrModalNik = document.getElementById('qrModalNik');
+            const qrModalImg = document.getElementById('qrModalImg');
+
+            document.querySelectorAll('.btnShowQr').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const nik = btn.getAttribute('data-nik');
+                    const nama = btn.getAttribute('data-nama');
+                    const qrUrl = btn.getAttribute('data-qr-url');
+                    const fallbackQr = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(nik)}`;
+
+                    if (qrModalNama) qrModalNama.textContent = nama;
+                    if (qrModalNik) qrModalNik.textContent = nik;
+                    if (qrModalImg) {
+                        qrModalImg.src = qrUrl || fallbackQr;
+                        qrModalImg.onerror = () => {
+                            qrModalImg.onerror = null;
+                            qrModalImg.src = fallbackQr;
+                        };
+                    }
+
+                    qrModal?.classList.remove('hidden');
+                });
+            });
+
+            const closeQrModal = () => qrModal?.classList.add('hidden');
+            document.getElementById('closeQrModalBtn')?.addEventListener('click', closeQrModal);
+            document.getElementById('closeQrModalBtnBottom')?.addEventListener('click', closeQrModal);
+            qrModal?.addEventListener('click', (e) => {
+                if (e.target === qrModal) closeQrModal();
+            });
         </script>
     @endpush
+
+    <!-- ======================================================= -->
+    <!-- MODAL: PREVIEW QR CODE KARYAWAN                         -->
+    <!-- ======================================================= -->
+    <div id="qrModal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl border border-slate-200 max-w-xs w-full p-6 text-center shadow-2xl relative space-y-4">
+            <button type="button" id="closeQrModalBtn" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-slate-700 text-lg leading-none">&times;</button>
+
+            <div class="space-y-0.5 pt-1">
+                <h4 id="qrModalNama" class="text-base font-extrabold text-slate-900">Nama Karyawan</h4>
+                <p id="qrModalNik" class="text-xs font-mono font-bold text-[#0060b2]">NIK</p>
+            </div>
+
+            <!-- QR Code Box -->
+            <div class="flex flex-col items-center justify-center p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                <img id="qrModalImg" src="" alt="QR Code Karyawan" class="w-56 h-56 object-contain shadow-2xs bg-white p-2 rounded">
+            </div>
+
+            <button type="button" id="closeQrModalBtnBottom"
+                class="w-full py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded transition shadow-xs">
+                Tutup
+            </button>
+        </div>
+    </div>
 @endsection

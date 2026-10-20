@@ -20,6 +20,7 @@ class Karyawan extends Model
         'divisi',
         'jabatan',
         'gender',
+        'qr_code_url',
         'is_active',
         'synced_at',
     ];

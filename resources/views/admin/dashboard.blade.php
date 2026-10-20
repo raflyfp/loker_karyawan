@@ -35,7 +35,7 @@
                         <span class="text-xs text-slate-500 font-medium ml-1">Tersedia</span>
                     </div>
                     <div class="text-right text-xs space-y-0.5">
-                        <div class="text-rose-600 font-semibold">{{ $maleOccupied }} Terisi</div>
+                        <div id="statMaleOccupied" class="text-rose-600 font-semibold">{{ $maleOccupied }} Terisi</div>
                         <div id="statMaleDisabled" class="text-slate-400">{{ $maleDisabled }} Dikunci (Maintenance)</div>
                     </div>
                 </div>
@@ -44,9 +44,9 @@
                         $maleOccPct = $maleTotal > 0 ? ($maleOccupied / $maleTotal) * 100 : 0;
                         $maleDisPct = $maleTotal > 0 ? ($maleDisabled / $maleTotal) * 100 : 0;
                     @endphp
-                    <div class="bg-rose-500 h-2" style="width: {{ $maleOccPct }}%" title="Terisi: {{ $maleOccupied }}">
+                    <div id="barMaleOccupied" class="bg-rose-500 h-2 transition-all duration-300" style="width: {{ $maleOccPct }}%" title="Terisi: {{ $maleOccupied }}">
                     </div>
-                    <div class="bg-slate-400 h-2" style="width: {{ $maleDisPct }}%" title="Dikunci: {{ $maleDisabled }}">
+                    <div id="barMaleDisabled" class="bg-slate-400 h-2 transition-all duration-300" style="width: {{ $maleDisPct }}%" title="Dikunci: {{ $maleDisabled }}">
                     </div>
                 </div>
             </div>
@@ -59,10 +59,6 @@
                         <span class="text-xs font-bold uppercase tracking-wider text-[#d92534]">Kapasitas Loker
                             Perempuan</span>
                     </div>
-                    {{-- <span
-                        class="text-[11px] font-semibold px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200">
-                        Total {{ $femaleTotal }} Loker
-                    </span> --}}
                 </div>
                 <div class="mt-3 flex items-baseline justify-between">
                     <div>
@@ -71,7 +67,7 @@
                         <span class="text-xs text-slate-500 font-medium ml-1">Tersedia</span>
                     </div>
                     <div class="text-right text-xs space-y-0.5">
-                        <div class="text-rose-600 font-semibold">{{ $femaleOccupied }} Terisi</div>
+                        <div id="statFemaleOccupied" class="text-rose-600 font-semibold">{{ $femaleOccupied }} Terisi</div>
                         <div id="statFemaleDisabled" class="text-slate-400">{{ $femaleDisabled }} Dikunci (Maintenance)
                         </div>
                     </div>
@@ -81,9 +77,9 @@
                         $femOccPct = $femaleTotal > 0 ? ($femaleOccupied / $femaleTotal) * 100 : 0;
                         $femDisPct = $femaleTotal > 0 ? ($femaleDisabled / $femaleTotal) * 100 : 0;
                     @endphp
-                    <div class="bg-rose-500 h-2" style="width: {{ $femOccPct }}%"
+                    <div id="barFemaleOccupied" class="bg-rose-500 h-2 transition-all duration-300" style="width: {{ $femOccPct }}%"
                         title="Terisi: {{ $femaleOccupied }}"></div>
-                    <div class="bg-slate-400 h-2" style="width: {{ $femDisPct }}%"
+                    <div id="barFemaleDisabled" class="bg-slate-400 h-2 transition-all duration-300" style="width: {{ $femDisPct }}%"
                         title="Dikunci: {{ $femaleDisabled }}"></div>
                 </div>
             </div>
@@ -482,6 +478,96 @@
                     toggleLockBtn.classList.remove('opacity-70');
                 }
             });
+
+            // =======================================================
+            // REAL-TIME AUTO-SYNC BACKGROUND POLLING (SETIAP 5 DETIK)
+            // =======================================================
+            async function syncLockerStatus() {
+                try {
+                    const res = await fetch('/api/loker/status');
+                    const data = await res.json();
+                    if (!data.success) return;
+
+                    // Update summary stats & progress bars
+                    const sum = data.summary;
+                    const maleAvailEl = document.getElementById('statMaleAvailable');
+                    const maleOccEl = document.getElementById('statMaleOccupied');
+                    const maleDisEl = document.getElementById('statMaleDisabled');
+                    const badgeMale = document.getElementById('badgeMaleTersedia');
+                    const barMaleOcc = document.getElementById('barMaleOccupied');
+                    const barMaleDis = document.getElementById('barMaleDisabled');
+
+                    if (maleAvailEl) maleAvailEl.textContent = sum.available_male;
+                    if (maleOccEl) maleOccEl.textContent = `${sum.occupied_male} Terisi`;
+                    if (maleDisEl) maleDisEl.textContent = `${sum.disabled_male} Dikunci (Maintenance)`;
+                    if (badgeMale) badgeMale.textContent = `${sum.available_male} / 100 Tersedia`;
+                    if (barMaleOcc) {
+                        const pct = sum.total_male > 0 ? (sum.occupied_male / sum.total_male) * 100 : 0;
+                        barMaleOcc.style.width = pct + '%';
+                        barMaleOcc.setAttribute('title', `Terisi: ${sum.occupied_male}`);
+                    }
+                    if (barMaleDis) {
+                        const pct = sum.total_male > 0 ? (sum.disabled_male / sum.total_male) * 100 : 0;
+                        barMaleDis.style.width = pct + '%';
+                        barMaleDis.setAttribute('title', `Dikunci: ${sum.disabled_male}`);
+                    }
+
+                    const femaleAvailEl = document.getElementById('statFemaleAvailable');
+                    const femaleOccEl = document.getElementById('statFemaleOccupied');
+                    const femaleDisEl = document.getElementById('statFemaleDisabled');
+                    const badgeFemale = document.getElementById('badgeFemaleTersedia');
+                    const barFemaleOcc = document.getElementById('barFemaleOccupied');
+                    const barFemaleDis = document.getElementById('barFemaleDisabled');
+
+                    if (femaleAvailEl) femaleAvailEl.textContent = sum.available_female;
+                    if (femaleOccEl) femaleOccEl.textContent = `${sum.occupied_female} Terisi`;
+                    if (femaleDisEl) femaleDisEl.textContent = `${sum.disabled_female} Dikunci (Maintenance)`;
+                    if (badgeFemale) badgeFemale.textContent = `${sum.available_female} / 100 Tersedia`;
+                    if (barFemaleOcc) {
+                        const pct = sum.total_female > 0 ? (sum.occupied_female / sum.total_female) * 100 : 0;
+                        barFemaleOcc.style.width = pct + '%';
+                        barFemaleOcc.setAttribute('title', `Terisi: ${sum.occupied_female}`);
+                    }
+                    if (barFemaleDis) {
+                        const pct = sum.total_female > 0 ? (sum.disabled_female / sum.total_female) * 100 : 0;
+                        barFemaleDis.style.width = pct + '%';
+                        barFemaleDis.setAttribute('title', `Dikunci: ${sum.disabled_female}`);
+                    }
+
+                    // Update grid boxes (Laki-laki & Perempuan)
+                    const updateGrid = (items) => {
+                        items.forEach(item => {
+                            const box = document.getElementById(`locker-cell-${item.id}`);
+                            if (!box) return;
+
+                            const isModalOpenForThis = !modal.classList.contains('hidden') && currentLockerId === String(item.id);
+                            
+                            box.setAttribute('data-status', item.status);
+                            box.setAttribute('data-is-active', item.is_active ? '1' : '0');
+                            box.setAttribute('data-karyawan', item.karyawan_nama || '');
+                            box.setAttribute('data-nik', item.karyawan_nik || '');
+                            box.setAttribute('data-alokasi-id', item.alokasi_id || '');
+
+                            box.className = `loker-box status-${item.status} locker-clickable text-xs`;
+                            box.innerHTML = `<span>${item.nomor}</span>` + (!item.is_active ? '<span class="text-[9px] leading-none">🔒</span>' : '');
+
+                            // Jika modal sedang terbuka untuk loker ini, perbarui status di modal langsung
+                            if (isModalOpenForThis) {
+                                openModalForLocker(box);
+                            }
+                        });
+                    };
+
+                    updateGrid(data.male);
+                    updateGrid(data.female);
+
+                } catch (e) {
+                    // Abaikan kesalahan koneksi sementara saat polling
+                }
+            }
+
+            // Jalankan polling auto-sync real-time setiap 5 detik
+            setInterval(syncLockerStatus, 5000);
         });
     </script>
 @endpush
